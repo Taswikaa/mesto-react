@@ -1,11 +1,11 @@
-function ImagePopup(props) {
+function ImagePopup({ card, onClose }) {
   return (
-    <div className={`popup popup_image ${props.isOpen && 'popup_opened'}`}>
+    <div className={`popup popup_image ${card && 'popup_opened'}`}>
       <figure className="popup__figure">
-        <button className="button popup__button popup__button_purpose_close" onClick={props.onClose}></button>
+        <button className="button popup__button popup__button_purpose_close" onClick={card && onClose}></button>
         {/* link через шаблонную строку, так как девтулзы жалуются на неправильный тип */}
-        <img className="popup__img" src={`${props.card.link}`} alt={props.card.name} />
-        <figcaption className="popup__text">{props.card.name}</figcaption>
+        <img className="popup__img" src={`${card && card.link}`} alt={card && card.name} />
+        <figcaption className="popup__text">{card && card.name}</figcaption>
       </figure>
     </div>
   );

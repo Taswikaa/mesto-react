@@ -24,20 +24,17 @@ function App() {
     setEditProfilePopupOpen(false);
     setEditAvatarPopupOpen(false);
     setAddPlacePopupOpen(false);
-    setImagePopupOpen(false);
-    setSelectedCard('');
+    setSelectedCard(null);
   }
 
   const handleCardClick = function(card) {
-    setImagePopupOpen(true);
     setSelectedCard(card);
   }
 
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState('');
+  const [selectedCard, setSelectedCard] = useState(null);
 
   return (
     <div className="page">
@@ -45,54 +42,30 @@ function App() {
       <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} />
       <Footer />
 
-      <PopupWithForm name="edit" title="Редактировать профиль" children={
-        <>
+      <PopupWithForm name="edit" title="Редактировать профиль" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
           <input className="popup__input popup__input_pupose_name" type="text" defaultValue="" name="nick" placeholder="Ваше имя" id="nick-input" required minLength="2" maxLength="40" />
           <span className="popup__span-error nick-input-error"></span>
-         <input className="popup__input popup__input_pupose_job" type="text" defaultValue="" name="job" placeholder="Ваше хобби" id="job-input" required minLength="2" maxLength="200" />
-         <span className="popup__span-error job-input-error"></span>
-         <button className="popup__button popup__button_purpose_submit">Сохранить</button>
-        </>
-      } isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+          <input className="popup__input popup__input_pupose_job" type="text" defaultValue="" name="job" placeholder="Ваше хобби" id="job-input" required minLength="2" maxLength="200" />
+          <span className="popup__span-error job-input-error"></span>
+      </ PopupWithForm>
 
-      <PopupWithForm name="add" title="Новое место" children={
-        <>
+      <PopupWithForm name="add" title="Новое место" buttonText="Создать" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} >
           <input className="popup__input popup__input_pupose_place" type="text" defaultValue="" name="place" placeholder="Название" id="place-input" required minLength="2" maxLength="30" />
           <span className="popup__span-error place-input-error"></span>
           <input className="popup__input popup__input_pupose_url" type="url" defaultValue="" name="url-image" placeholder="Ссылка на картинку" id="url-input" required />
           <span className="popup__span-error url-input-error"></span>
-          <button className="popup__button popup__button_purpose_submit">Создать</button>
-        </>
-      } isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
+      </ PopupWithForm>
 
-      <PopupWithForm name="change-avatar" title="Обновить аватар" children={
-        <>
+      <PopupWithForm name="change-avatar" title="Обновить аватар" buttonText="Сохранить" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
           <input className="popup__input popup__input_pupose_url" type="url" defaultValue="" name="url-avatar" placeholder="Ссылка на аватар" id="url-avatar" required />
           <span className="popup__span-error url-avatar-error"></span>
-          <button className="popup__button popup__button_purpose_submit">Сохранить</button>
-        </>
-      } isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
+      </ PopupWithForm>
 
       <PopupWithForm name="delete" title="Вы уверены?" children={
         <button className="popup__button popup__button_purpose_submit">Да</button>
       } />
 
-      <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
-      {/* <template id="elements-template">
-        <li className="elements__item">
-          <div className="elements__card">
-            <button className="button elements__delete-icon"></button>
-            <img className="elements__image" src="#" alt="" />
-            <div className="elements__info">
-              <h2 className="elements__name"></h2>
-              <div className="elements__likes">
-                <button className="button elements__favorite" type="button"></button>
-                <p className="elements__like-counter"></p>
-              </div>
-             </div>
-          </div>
-        </li>
-      </template> */}
+      <ImagePopup card={selectedCard} onClose={closeAllPopups}  />
     </div>
   );
 }
