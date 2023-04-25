@@ -24,20 +24,11 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
 
     api.getInitialCards()
     .then(data => {
-      setCards([...cards, data])
+      setCards(data)
     })
     .catch(err => {
       console.log(`Ошибка ${err}, карточки не загружены`);
     })
-
-    // Promise.all([getUserInfo, getInitialCards])
-    // .then(data => {
-    //   setUserName(data[0].name);
-    //   setUserDescription(data[0].about);
-    //   setUserAvatar(data[0].avatar);
-
-    //   setCards([...cards, data[1]])
-    // })
 
     return () => {
 
@@ -59,7 +50,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
       <section className="elements">
         <ul className="elements__wrapper">
           {
-            cards.length && cards[0].map(el => 
+            cards.length && cards.map(el => 
               <Card el={el} onCardClick={onCardClick} key={el._id} />
             )
           }
