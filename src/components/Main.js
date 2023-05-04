@@ -1,39 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import Card from "./Card";
 import pencilImage from "../images/pencil.svg"
 import api from "../utils/api";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
-  const [cards, setCards] = useState([]);
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, cards, onCardDelete }) {
+  
+  const userData = React.useContext(CurrentUserContext);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   api.getInitialCards()
+  //   .then(data => {
+  //     setCards(data)
+  //   })
+  //   .catch(err => {
+  //     console.log(`Ошибка ${err}, карточки не загружены`);
+  //   })
 
-    api.getUserInfo()
-    .then(data => {
-      setUserName(data.name);
-      setUserDescription(data.about);
-      setUserAvatar(data.avatar);
-    })
-    .catch(err => {
-      console.log(`Ошибка ${err}, данные пользователя не загружены`);
-    })
+  //   return () => {
 
-    api.getInitialCards()
-    .then(data => {
-      setCards(data)
-    })
-    .catch(err => {
-      console.log(`Ошибка ${err}, карточки не загружены`);
-    })
+  //   }
+  // }, [])
 
-    return () => {
-
-    }
-  }, [])
+  const userName = userData.name;
+  const userDescription = userData.about;
+  const userAvatar = userData.avatar;
 
   return (
     <main className="main">
@@ -51,7 +43,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
         <ul className="elements__wrapper">
           {
             cards.length && cards.map(el => 
-              <Card el={el} onCardClick={onCardClick} key={el._id} />
+              <Card el={el} onCardClick={onCardClick} key={el._id} onCardLike={onCardLike} onCardDelete={onCardDelete} />
             )
           }
         </ul>
