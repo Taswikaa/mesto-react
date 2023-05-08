@@ -2,26 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 
 import Card from "./Card";
 import pencilImage from "../images/pencil.svg"
-import api from "../utils/api";
+// import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, cards, onCardDelete }) {
   
   const userData = React.useContext(CurrentUserContext);
-
-  // useEffect(() => {
-  //   api.getInitialCards()
-  //   .then(data => {
-  //     setCards(data)
-  //   })
-  //   .catch(err => {
-  //     console.log(`Ошибка ${err}, карточки не загружены`);
-  //   })
-
-  //   return () => {
-
-  //   }
-  // }, [])
 
   const userName = userData.name;
   const userDescription = userData.about;
@@ -34,7 +20,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike
         <img className="profile__pencil" src={pencilImage} alt="Иконка редактирования профиля" />
         <div className="profile__info">
           <h1 className="profile__name">{userName}</h1>
-          <button className="button profile__edit-button" type="button" onClick={ onEditProfile }></button>
+          <button className="button profile__edit-button" type="button" onClick={ onEditProfile } />
           <p className="profile__job">{userDescription}</p>
         </div>
         <button className="button profile__add-button" type="button" onClick={ onAddPlace }></button>
@@ -43,7 +29,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike
         <ul className="elements__wrapper">
           {
             cards.length && cards.map(el => 
-              <Card el={el} onCardClick={onCardClick} key={el._id} onCardLike={onCardLike} onCardDelete={onCardDelete} />
+              (<Card el={el} onCardClick={onCardClick} key={el._id} onCardLike={onCardLike} onCardDelete={onCardDelete} />)
             )
           }
         </ul>

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -78,6 +77,7 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [cards, setCards] = useState([]);
 
@@ -97,13 +97,11 @@ function App() {
     .catch(err => {
       console.log(`Ошибка ${err}, карточки не загружены`);
     })
-
-    return () => {
-
-    }
   }, [])
 
   const handleUpdateUser = function(name, description) {
+    setIsLoading(true);
+
     api.editUserInfo(name, description)
     .then(data => {
       setCurrentUser(data);
@@ -112,24 +110,39 @@ function App() {
     .catch(err => {
       console.log(`Ошибка ${err}, не удалось обновить данные пользователя`);
     })
+    .finally(() => {
+      setIsLoading(false);
+    })
   }
 
   const handleUpdateAvatar = function(link) {
+    setIsLoading(true);
+
     api.changeAvatar(link)
     .then(data => {
       setCurrentUser(data);
       closeAllPopups();
     })
     .catch(err => {
-      console.log(`Ошибка ${err}, не удалось добавить карточку`);
+      console.log(`Ошибка ${err}, не удалось обновить аватар`);
+    })
+    .finally(() => {
+      setIsLoading(false);
     })
   }
 
   const handleAddPlaceSubmit = function(name, link) {
+    setIsLoading(true);
+
     api.addNewCard(name, link, [])
     .then(data => {
       setCards([data, ...cards]);
       closeAllPopups();
+    }).catch(err => {
+      console.log(`Ошибка ${err}, не удалось добавить карточку`);
+    })
+    .finally(() => {
+      setIsLoading(false);
     })
   }
 
@@ -144,17 +157,13 @@ function App() {
         <Main onEditAvatar={handleEditAvatarClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onCardClick={handleCardClick} onCardLike={handleLikeClick} cards={cards} onCardDelete={handleCardDelete} />
         <Footer />
 
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+        <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
 
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddCard={handleAddPlaceSubmit} />
+        <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddCard={handleAddPlaceSubmit} isLoading={isLoading} />
 
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
 
-        <PopupWithForm name="delete" title="Вы уверены?" children={
-          <button className="popup__button popup__button_purpose_submit">Да</button>
-        } />
-
-        <ImagePopup card={selectedCard} onClose={closeAllPopups}  />
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>
   );
